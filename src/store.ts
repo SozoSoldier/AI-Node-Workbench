@@ -1,4 +1,6 @@
 import { create } from "zustand";
+// 1. Import the persist middleware tool from zustand
+import { persist } from "zustand/middleware";
 
 export interface Message {
   id: string;
@@ -18,7 +20,7 @@ interface ChatStore {
   isAuthenticated: boolean;
   username: string | null;
 
-  createNewThread: () => string; // Returns the new thread's ID
+  createNewThread: () => string;
   setActiveThread: (id: string) => void;
   addMessageToActiveThread: (message: Message) => void;
   clearAllThreads: () => void;
@@ -26,68 +28,76 @@ interface ChatStore {
   logout: () => void;
 }
 
-export const useChatStore = create<ChatStore>((set, get) => ({
-  threads: [],
-  activeThreadId: null,
-  isAuthenticated: false,
-  username: null,
-
-  createNewThread: () => {
-    const newId = `thread-${Date.now()}`;
-    const newThread: ChatThread = {
-      id: newId,
-      title: `Chat Session #${get().threads.length + 1}`,
-      messages: [],
-    };
-
-    set((state) => ({
-      threads: [newThread, ...state.threads], // Add to the top of the list
-      activeThreadId: newId, // Instantly switch focus to it
-    }));
-
-    return newId;
-  },
-
-  setActiveThread: (id) => set({ activeThreadId: id }),
-
-  addMessageToActiveThread: (newMessage) => {
-    const { threads, activeThreadId } = get();
-    if (!activeThreadId) return;
-
-    // Map through threads and append the message ONLY to the currently active thread
-    const updatedThreads = threads.map((thread) => {
-      if (thread.id === activeThreadId) {
-        // Optional: Update thread title dynamically using the first words of the first message
-        const newTitle =
-          thread.messages.length === 0 && newMessage.sender === "user"
-            ? newMessage.text.substring(0, 24) + "..."
-            : thread.title;
-
-        return {
-          ...thread,
-          title: newTitle,
-          messages: [...thread.messages, newMessage],
-        };
-      }
-      return thread;
-    });
-
-    set({ threads: updatedThreads });
-  },
-
-  clearAllThreads: () => set({ threads: [], activeThreadId: null }),
-
-  login: (user) => {
-    set({ isAuthenticated: true, username: user });
-    // Proactively generate a default first chat container right upon authenticating
-    get().createNewThread();
-  },
-
-  logout: () =>
-    set({
-      isAuthenticated: false,
-      username: null,
+// 2. Wrap your entire store creation function inside the persist() middleware wrapper
+export const useChatStore = create<ChatStore>()(
+  persist(
+    (set, get) => ({
       threads: [],
       activeThreadId: null,
+      isAuthenticated: false,
+      username: null,
+
+      createNewThread: () => {
+        const newId = `thread-${Date.now()}`;
+        const newThread: ChatThread = {
+          id: newId,
+          title: `Chat Session #${get().threads.length + 1}`,
+          messages: [],
+        };
+
+        set((state) => ({
+          threads: [newThread, ...state.threads],
+          activeThreadId: newId,
+        }));
+
+        return newId;
+      },
+
+      setActiveThread: (id) => set({ activeThreadId: id }),
+
+      addMessageToActiveThread: (newMessage) => {
+        const { threads, activeThreadId } = get();
+        if (!activeThreadId) return;
+
+        const updatedThreads = threads.map((thread) => {
+          if (thread.id === activeThreadId) {
+            const newTitle =
+              thread.messages.length === 0 && newMessage.sender === "user"
+                ? newMessage.text.substring(0, 24) + "..."
+                : thread.title;
+
+            return {
+              ...thread,
+              title: newTitle,
+              messages: [...thread.messages, newMessage],
+            };
+          }
+          return thread;
+        });
+
+        set({ threads: updatedThreads });
+      },
+
+      clearAllThreads: () => set({ threads: [], activeThreadId: null }),
+
+      login: (user) => {
+        set({ isAuthenticated: true, username: user });
+        if (get().threads.length === 0) {
+          get().createNewThread();
+        }
+      },
+
+      logout: () =>
+        set({
+          isAuthenticated: false,
+          username: null,
+          threads: [],
+          activeThreadId: null,
+        }),
     }),
-}));
+    {
+      // 3. Provide a unique key name. Zustand uses this to save data inside browser localStorage
+      name: "ai-workbench-auth-storage",
+    },
+  ),
+);
