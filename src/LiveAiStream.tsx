@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useChatStore, type Message } from "./store";
+import { useChatStore } from "./store";
 import Markdown from "react-markdown";
 
 export const LiveAiStream: React.FC = () => {
