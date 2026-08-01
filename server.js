@@ -66,6 +66,20 @@ app.get("/api/model-config", (req, res) => {
   res.status(200).json(aiDatabaseConfig);
 });
 
+app.get("/api/framework-registry", (req, res) => {
+  const mockFrameworks = {
+    results: [
+      { name: "DeepSeek-R1-Core" },
+      { name: "Claude-3.5-Sonnet-Node" },
+      { name: "GPT-4o-Mini-Agent" },
+      { name: "Llama-3.3-Instruct" },
+      { name: "Mistral-Large-2" },
+    ],
+  };
+
+  res.status(200).json(mockFrameworks);
+});
+
 // Updated POST handler leveraging our new schemas
 app.post("/api/submit-config", (req, res) => {
   console.log(

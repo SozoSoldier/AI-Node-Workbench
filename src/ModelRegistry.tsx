@@ -18,8 +18,7 @@ export const ModelRegistry: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        // Use your relative proxy path. Vite forwards this safely to cdnjs.
-        const response = await fetch("/api/cdnjs/libraries?limit=5");
+        const response = await fetch("/api/framework-registry");
 
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}`);
