@@ -26,13 +26,6 @@ export default defineConfig({
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      // NEW: Add a secure server proxy path for cdnjs data streams
-      "/api/cdnjs": {
-        target: "https://api.cdnjs.com",
-        changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/api\/cdnjs/, ""),
-      },
     },
   },
 });
