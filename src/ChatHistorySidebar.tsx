@@ -3,7 +3,6 @@ import { NavLink } from "react-router";
 import { useChatStore } from "./store";
 
 export const ChatHistorySidebar: React.FC = () => {
-  // Grab session properties out of our store hook
   const {
     threads,
     activeThreadId,
@@ -13,11 +12,14 @@ export const ChatHistorySidebar: React.FC = () => {
   } = useChatStore();
 
   return (
-    <div className="w-64 bg-slate-900 p-4 border-r border-slate-800 text-slate-300 flex flex-col justify-between h-full flex-shrink-0">
-      {/* Sessions Control Panel */}
-      <div className="flex flex-col h-1/2 min-h-0 border-b border-slate-800 pb-4">
-        <div className="flex justify-between items-center mb-3 flex-shrink-0">
-          <h3 className="font-bold text-[11px] uppercase tracking-wider text-slate-500">
+    // HIGHLIGHT: Changed 'w-64 h-full' to 'w-full md:w-64 h-auto md:h-full flex-col md:flex-col'.
+    // This stacks it vertically on mobile, and adds a soft bottom border instead of a right border on small viewports.
+    <div className="w-full md:w-64 bg-slate-900 p-3 md:p-4 border-b md:border-b-0 md:border-r border-slate-800 text-slate-300 flex flex-col justify-between flex-shrink-0 gap-3 md:gap-0">
+      {/* Active Sessions Drawer Block */}
+      {/* On mobile, we compress the height limit of the thread selector to 120px so it doesn't push down the chat view */}
+      <div className="flex flex-col h-auto md:h-1/2 min-h-0 border-b border-slate-800 pb-3 md:pb-4">
+        <div className="flex justify-between items-center mb-2 flex-shrink-0">
+          <h3 className="font-bold text-[10px] md:text-[11px] uppercase tracking-wider text-slate-500">
             Active Sessions
           </h3>
           <button
@@ -28,75 +30,78 @@ export const ChatHistorySidebar: React.FC = () => {
           </button>
         </div>
 
-        {/* 1. NEW CHAT BUTTON TRIGGER */}
         <button
           onClick={() => createNewThread()}
-          className="w-full mb-3 py-2 px-3 bg-slate-950 border border-slate-800 hover:border-slate-700 hover:bg-slate-900 text-xs text-indigo-400 font-semibold rounded-lg text-left flex items-center justify-between transition-all"
+          className="w-full mb-2 py-1.5 px-3 bg-slate-950 border border-slate-800 hover:bg-slate-900 text-[11px] text-indigo-400 font-semibold rounded-lg flex items-center justify-between transition-all flex-shrink-0"
         >
           <span>➕ Open New Chat</span>
+          <span className="text-[9px] bg-slate-900 text-slate-600 px-1.5 py-0.5 rounded border border-slate-800 hidden md:inline">
+            Ctrl N
+          </span>
         </button>
 
-        {/* 2. INTERACTIVE INTERCONNECTED SESSION THREAD SELECTOR LIST */}
-        <ul className="space-y-1 text-xs overflow-y-auto flex-1 pr-1 custom-scrollbar">
+        {/* Dynamic scroll box limits height parameters context explicitly on mobile layout scales */}
+        <ul className="space-y-1 text-xs overflow-y-auto max-h-[110px] md:max-h-none flex-1 pr-1 custom-scrollbar">
           {threads.map((thread) => {
             const isSelected = thread.id === activeThreadId;
             return (
               <li
                 key={thread.id}
                 onClick={() => setActiveThread(thread.id)}
-                className={`p-2.5 rounded-lg cursor-pointer transition-all border flex items-center justify-between truncate select-none ${
+                className={`p-2 rounded-lg cursor-pointer transition-all border flex items-center justify-between truncate select-none text-[11px] ${
                   isSelected
-                    ? "bg-slate-800 text-slate-100 border-indigo-500/40 shadow-md shadow-indigo-950/10"
-                    : "bg-slate-950/20 text-slate-400 border-transparent hover:bg-slate-800/40 hover:text-slate-200"
+                    ? "bg-slate-800 text-slate-100 border-indigo-500/40 shadow-sm"
+                    : "bg-slate-950/20 text-slate-400 border-transparent hover:bg-slate-800/40"
                 }`}
               >
-                <div className="flex items-center gap-2 truncate">
+                <div className="flex items-center gap-1.5 truncate">
                   <span>{isSelected ? "💬" : "📁"}</span>
                   <span className="font-medium truncate">{thread.title}</span>
                 </div>
-                <span className="text-[10px] text-slate-600 font-mono flex-shrink-0 ml-2">
-                  {thread.messages.length} msg
+                <span className="text-[9px] text-slate-600 font-mono flex-shrink-0 ml-1">
+                  {thread.messages.length}m
                 </span>
               </li>
             );
           })}
-          {threads.length === 0 && (
-            <p className="text-slate-600 italic text-[11px] text-center mt-4">
-              Click "New Chat" to begin...
-            </p>
-          )}
         </ul>
       </div>
 
-      {/* Persistent App Navigation Links */}
-      <div className="flex-1 flex flex-col pt-4 min-h-0">
-        <h3 className="font-bold text-[11px] uppercase tracking-wider text-slate-500 mb-3">
+      {/* System Navigation Layer Link Elements */}
+      {/* On mobile, we row-wrap the navigation items horizontally instead of listing them as lines! */}
+      <div className="flex flex-col pt-1 md:pt-4 min-h-0">
+        <h3 className="font-bold text-[10px] md:text-[11px] uppercase tracking-wider text-slate-500 mb-2 hidden md:block">
           System Navigation
         </h3>
-        <nav className="space-y-1 flex-1">
+        <nav className="flex flex-row md:flex-col gap-1 overflow-x-auto pb-1 md:pb-0 custom-scrollbar">
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${isActive ? "bg-indigo-600 text-white border-l-4 border-indigo-400 pl-2" : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"}`
+              `flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${isActive ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400" : "text-slate-400 hover:bg-slate-800/60"}`
             }
           >
-            <span>💬</span> AI Workspace Chat
+            <span>💬</span>{" "}
+            <span className="whitespace-nowrap">Workspace Chat</span>
           </NavLink>
+
           <NavLink
             to="/registry"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${isActive ? "bg-indigo-600 text-white border-l-4 border-indigo-400 pl-2" : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"}`
+              `flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${isActive ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400" : "text-slate-400 hover:bg-slate-800/60"}`
             }
           >
-            <span>📊</span> Model Registry Database
+            <span>📊</span>{" "}
+            <span className="whitespace-nowrap">Model Registry</span>
           </NavLink>
+
           <NavLink
             to="/settings"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${isActive ? "bg-indigo-600 text-white border-l-4 border-indigo-400 pl-2" : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"}`
+              `flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${isActive ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400" : "text-slate-400 hover:bg-slate-800/60"}`
             }
           >
-            <span>⚙️</span> App Settings Studio
+            <span>⚙️</span>{" "}
+            <span className="whitespace-nowrap">Settings Studio</span>
           </NavLink>
         </nav>
       </div>
