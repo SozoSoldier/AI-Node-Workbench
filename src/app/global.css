@@ -1,0 +1,18 @@
+/* 1. REPLACE your old three @tailwind lines with this single v4 standard import */
+@import "tailwindcss";
+
+/* 2. Keep your existing custom scrollbar styles below it */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0f172a;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}

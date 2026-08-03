@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import Link from "next/link";
 
 export const SettingsPage: React.FC = () => {
   return (
@@ -9,7 +9,7 @@ export const SettingsPage: React.FC = () => {
         Configure your local mock AI tokens, stream frequencies, and system
         prompts here.
       </p>
-      <Link to="/" className="text-indigo-400 hover:underline">
+      <Link href="/" className="text-indigo-400 hover:underline">
         ← Back to Chat Dashboard
       </Link>
     </div>

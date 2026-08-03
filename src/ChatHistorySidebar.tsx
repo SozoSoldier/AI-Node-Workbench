@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router";
+import Link from "next/link";
+import { usePathname } from "next/navigation"; // Next.js tool to track active pages
 import { useChatStore } from "./store";
 
 export const ChatHistorySidebar: React.FC = () => {
@@ -10,6 +10,8 @@ export const ChatHistorySidebar: React.FC = () => {
     setActiveThread,
     clearAllThreads,
   } = useChatStore();
+
+  const pathname = usePathname();
 
   return (
     // HIGHLIGHT: Changed 'w-64 h-full' to 'w-full md:w-64 h-auto md:h-full flex-col md:flex-col'.
@@ -35,9 +37,6 @@ export const ChatHistorySidebar: React.FC = () => {
           className="w-full mb-2 py-1.5 px-3 bg-slate-950 border border-slate-800 hover:bg-slate-900 text-[11px] text-indigo-400 font-semibold rounded-lg flex items-center justify-between transition-all flex-shrink-0"
         >
           <span>➕ Open New Chat</span>
-          <span className="text-[9px] bg-slate-900 text-slate-600 px-1.5 py-0.5 rounded border border-slate-800 hidden md:inline">
-            Ctrl N
-          </span>
         </button>
 
         {/* Dynamic scroll box limits height parameters context explicitly on mobile layout scales */}
@@ -74,35 +73,38 @@ export const ChatHistorySidebar: React.FC = () => {
           System Navigation
         </h3>
         <nav className="flex flex-row md:flex-col gap-1 overflow-x-auto pb-1 md:pb-0 custom-scrollbar">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${isActive ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400" : "text-slate-400 hover:bg-slate-800/60"}`
-            }
+          <Link
+            href="/"
+            className={`flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${
+              pathname === "/"
+                ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400"
+                : "text-slate-400 hover:bg-slate-800/60"
+            }`}
           >
-            <span>💬</span>{" "}
-            <span className="whitespace-nowrap">Workspace Chat</span>
-          </NavLink>
+            <span>💬</span> Workspace Chat
+          </Link>
 
-          <NavLink
-            to="/registry"
-            className={({ isActive }) =>
-              `flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${isActive ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400" : "text-slate-400 hover:bg-slate-800/60"}`
-            }
+          <Link
+            href="/registry"
+            className={`flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${
+              pathname === "/registry"
+                ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400"
+                : "text-slate-400 hover:bg-slate-800/60"
+            }`}
           >
-            <span>📊</span>{" "}
-            <span className="whitespace-nowrap">Model Registry</span>
-          </NavLink>
+            <span>📊</span> Model Registry
+          </Link>
 
-          <NavLink
-            to="/settings"
-            className={({ isActive }) =>
-              `flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${isActive ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400" : "text-slate-400 hover:bg-slate-800/60"}`
-            }
+          <Link
+            href="/settings"
+            className={`flex items-center gap-1.5 md:gap-3 px-2.5 md:px-3 py-1.5 md:py-2.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${
+              pathname === "/settings"
+                ? "bg-indigo-600 text-white shadow-md border-b-2 md:border-b-0 md:border-l-4 border-indigo-400"
+                : "text-slate-400 hover:bg-slate-800/60"
+            }`}
           >
-            <span>⚙️</span>{" "}
-            <span className="whitespace-nowrap">Settings Studio</span>
-          </NavLink>
+            <span>⚙️</span> Settings Studio
+          </Link>
         </nav>
       </div>
     </div>

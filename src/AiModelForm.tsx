@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import Link from "next/link";
 
 interface ModelFormData {
   modelName: string;
@@ -232,7 +232,7 @@ export const AiModelForm: React.FC = () => {
         {/* Submit Actions */}
         <div className="pt-2 flex items-center justify-between">
           <Link
-            to="/"
+            href="/"
             className="text-xs text-slate-400 hover:text-white transition-colors"
           >
             ← Abort Changes

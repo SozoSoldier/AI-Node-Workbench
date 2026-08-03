@@ -1,16 +1,20 @@
 import React from "react";
-import { Outlet, useNavigate } from "react-router";
 import { ChatHistorySidebar } from "./ChatHistorySidebar";
 import { useChatStore } from "./store";
+import { ChatDashboard } from "./ChatDashboard";
+import { useRouter } from "next/navigation"; // Replaces Angular's Router
 
-export const MainLayout: React.FC = () => {
+export const MainLayout: React.FC<{ children?: React.ReactNode }> = ({
+  children,
+}) => {
   const username = useChatStore((state) => state.username);
+  const router = useRouter();
   const logoutAction = useChatStore((state) => state.logout);
-  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logoutAction();
-    navigate("/login");
+    logoutAction(); // Wipes Zustand memory and deletes browser localStorage persistence
+
+    router.push("/");
   };
 
   return (
@@ -53,7 +57,7 @@ export const MainLayout: React.FC = () => {
 
           {/* Main workspace window adapts its internal padding spacing dynamically */}
           <main className="flex-1 flex items-center justify-center p-3 md:p-6 overflow-y-auto bg-slate-800 min-w-0 h-full">
-            <Outlet />
+            {children ? children : <ChatDashboard />}
           </main>
         </div>
       </div>

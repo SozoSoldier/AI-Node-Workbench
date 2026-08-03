@@ -82,18 +82,32 @@ export const useChatStore = create<ChatStore>()(
 
       login: (user) => {
         set({ isAuthenticated: true, username: user });
+
+        // NEW: Drop a standard browser session cookie that the server can read
+        if (typeof window !== "undefined") {
+          document.cookie =
+            "auth_session=true; path=/; max-age=86400; SameSite=Strict";
+        }
+
         if (get().threads.length === 0) {
           get().createNewThread();
         }
       },
 
-      logout: () =>
+      logout: () => {
         set({
           isAuthenticated: false,
           username: null,
           threads: [],
           activeThreadId: null,
-        }),
+        });
+
+        // NEW: Delete the authentication cookie instantly on logout
+        if (typeof window !== "undefined") {
+          document.cookie =
+            "auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+      },
     }),
     {
       // 3. Provide a unique key name. Zustand uses this to save data inside browser localStorage

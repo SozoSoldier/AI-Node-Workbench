@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useRouter } from "next/navigation"; // Replaces Angular's Router
 import { useChatStore } from "./store";
 
 interface LoginFormData {
@@ -10,7 +10,8 @@ interface LoginFormData {
 
 export const LoginPage: React.FC = () => {
   const loginAction = useChatStore((state) => state.login);
-  const navigate = useNavigate(); // Replaces Angular's this.router.navigate()
+  // FIX: Change 'useNavigate()' to the Next.js 'useRouter()' hook
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
@@ -22,13 +23,14 @@ export const LoginPage: React.FC = () => {
   const onLoginSubmit = (data: LoginFormData) => {
     setErrorMessage(null);
 
-    // Hardcoded mock authentication validation values
     if (
       data.usernameField === "admin" &&
       data.passwordField === "password123"
     ) {
-      loginAction(data.usernameField); // Save credentials globally in Zustand
-      navigate("/"); // Route back to the main chat layout
+      loginAction(data.usernameField);
+
+      // FIX: Change 'navigate("/")' to 'router.push("/")'
+      router.push("/");
     } else {
       setErrorMessage(
         "❌ Invalid Security Credentials. Please review the cheat sheet guidelines below.",
