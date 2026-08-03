@@ -21,44 +21,61 @@ export const LiveAiStream: React.FC = () => {
     }
   }, [activeMessages, isAiThinking]);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  // Replace your handleFormSubmit function inside src/LiveAiStream.tsx with this GraphQL request layout:
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userInput.trim() || !activeThreadId || isAiThinking) return;
 
     const userPromptText = userInput;
-    setUserInput(""); // Reset text box layout values instantly
+    setUserInput("");
 
-    // 1. Dispatch User Message into the store database thread tracker
+    // 1. Instantly update local state for the user's view layer
     addMessageToActiveThread({
       id: `msg-${Date.now()}-user`,
       sender: "user",
       text: userPromptText,
     });
 
-    // 2. Trigger Mock AI response generation cycle
     setIsAiThinking(true);
 
-    setTimeout(() => {
-      // Array list of smart structural replies to mimic actual LLM logic responses
-      const templateReplies = [
-        `I received your prompt regarding: "${userPromptText}". As a Node.js validation model, your schema maps safely. Let me know if you want me to write the TypeScript components for this!`,
-        `Analyzing query instructions... ⚙️\nYour instruction matrix looks stable. If you are preparing for a technical React assessment, focus on learning how **Zustand states decouple from view layouts** like we set up here.`,
-        `Here is a clean code pattern example matching your search topic:\n\`\`\`javascript\nconst express = require('express');\nconst app = express();\napp.listen(3000);\n\`\`\`\nDoes this align with your backend Express node architecture constraints?`,
-      ];
+    try {
+      // 2. Fire an explicit GraphQL Mutation payload directly to the Next.js backend endpoint
+      const graphQLMutation = {
+        query: `
+        mutation PushUserPrompt($threadId: ID!, $text: String!, $sender: String!) {
+          sendMessage(threadId: $threadId, text: $text, sender: $sender) {
+            id
+            text
+          }
+        }
+      `,
+        variables: {
+          threadId: activeThreadId,
+          text: userPromptText,
+          sender: "user",
+        },
+      };
 
-      // Grab a random reply string out of our template array container
-      const randomAiReply =
-        templateReplies[Math.floor(Math.random() * templateReplies.length)];
-
-      // 3. Dispatch AI response into the active thread
-      addMessageToActiveThread({
-        id: `msg-${Date.now()}-ai`,
-        sender: "ai",
-        text: randomAiReply,
+      // Execute the network request directly to your modern Next.js route
+      await fetch("/api/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(graphQLMutation),
       });
 
+      // 3. Trigger your mock AI response loop after the GraphQL handshake completes
+      setTimeout(() => {
+        addMessageToActiveThread({
+          id: `msg-${Date.now()}-ai`,
+          sender: "ai",
+          text: `Next.js GraphQL operational layer check successful! Your query data successfully parsed through Apollo Server schemas.`,
+        });
+        setIsAiThinking(false);
+      }, 1000);
+    } catch (error) {
+      console.error("GraphQL Data Sync Fault:", error);
       setIsAiThinking(false);
-    }, 1200); // 1.2 second simulated machine processing lag speed
+    }
   };
 
   if (!activeThreadId) {

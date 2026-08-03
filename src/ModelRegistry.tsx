@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router";
+import Link from "next/link";
 
 interface AIModel {
   id: string;
@@ -84,7 +84,7 @@ export const ModelRegistry: React.FC = () => {
       {/* Navigation section added to the bottom of the registry card */}
       <div className="border-t border-slate-700/60 pt-4 mt-6">
         <Link
-          to="/"
+          href="/"
           className="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1 transition-colors"
         >
           ← Back to Chat Dashboard
