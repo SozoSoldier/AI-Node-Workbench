@@ -67,4 +67,10 @@ const server = new ApolloServer({ typeDefs, resolvers });
 const handler = startServerAndCreateNextHandler<NextRequest>(server);
 
 // Export GET and POST handlers to listen to the incoming client graph requests
-export { handler as GET, handler as POST };
+export async function GET(request: NextRequest) {
+  return handler(request);
+}
+
+export async function POST(request: NextRequest) {
+  return handler(request);
+}
