@@ -108,11 +108,16 @@ export const AiModelForm: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmitHandler)} className="space-y-4">
         {/* Model Name */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+          <label
+            htmlFor="modelNameInput"
+            className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1"
+          >
             Model Node Name
           </label>
           <input
+            id="modelNameInput"
             type="text"
+            data-testid="model-name-field"
             {...register("modelName", {
               required: "Model Node Name is strictly required",
             })}
@@ -127,10 +132,14 @@ export const AiModelForm: React.FC = () => {
 
         {/* Temperature */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+          <label
+            htmlFor="temperatureInput"
+            className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1"
+          >
             Creativity Index (Temperature)
           </label>
           <input
+            id="temperatureInput"
             type="number"
             step="0.1"
             {...register("temperature", {
@@ -150,10 +159,14 @@ export const AiModelForm: React.FC = () => {
 
         {/* System Prompt */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+          <label
+            htmlFor="systemPromptInput"
+            className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1"
+          >
             System Instructions Prompt
           </label>
           <textarea
+            id="systemPromptInput"
             rows={3}
             {...register("systemPrompt", {
               required: "System prompt blocks cannot be left empty",
@@ -171,12 +184,13 @@ export const AiModelForm: React.FC = () => {
         <div className="flex items-center gap-3 py-2">
           <input
             type="checkbox"
-            id="isMaxTokensEnabled"
+            id="isMaxTokensEnabledInput"
+            data-testid="token-toggle-field"
             {...register("isMaxTokensEnabled")}
             className="w-4 h-4 rounded text-indigo-600 bg-slate-950 border-slate-800 focus:ring-indigo-500 focus:ring-2"
           />
           <label
-            htmlFor="isMaxTokensEnabled"
+            htmlFor="isMaxTokensEnabledInput"
             className="text-sm font-medium text-slate-300 select-none"
           >
             Enforce Hard Cap Limits on Output Token Generation Cycles
@@ -186,11 +200,18 @@ export const AiModelForm: React.FC = () => {
         {/* 4. CONDITIONAL LAYOUT & VALIDATION ROW */}
         {/* If the checkbox is true, render this entire input block */}
         {isMaxTokensChecked && (
-          <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 animate-fadeIn">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+          <div
+            data-testid="conditional-token-container"
+            className="p-4 bg-slate-950 rounded-lg border border-slate-800 animate-fadeIn"
+          >
+            <label
+              htmlFor="maxTokensInput"
+              className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1"
+            >
               Max Token Cap Allocation
             </label>
             <input
+              id="maxTokensInput"
               type="number"
               // Dynamically inject validation criteria: only require this if the box is checked
               {...register("maxTokens", {
