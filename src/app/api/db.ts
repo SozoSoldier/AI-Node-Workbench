@@ -7,7 +7,7 @@ interface ApiDatabaseModel {
   maxTokens: number | ""; // Allows true numbers or empty strings
 }
 
-// 2. Apply the interface to your live state variables
+// 2. Apply the interface to live state variables
 export let aiDatabaseConfig: ApiDatabaseModel = {
   modelName: "DeepSeek-R1-NextJS-Edition",
   temperature: 0.7,
@@ -17,7 +17,7 @@ export let aiDatabaseConfig: ApiDatabaseModel = {
   maxTokens: 4096,
 };
 
-// 3. Keep your configuration update helper fully synchronized
+// 3. Keep configuration update helper fully synchronized
 export const updateDatabaseConfig = (newData: ApiDatabaseModel) => {
   aiDatabaseConfig = newData;
 };

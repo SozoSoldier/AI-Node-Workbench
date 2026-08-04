@@ -7,7 +7,7 @@ interface ModelFormData {
   temperature: number;
   systemPrompt: string;
   isMaxTokensEnabled: boolean;
-  // Adds a new conditional field to your TypeScript interface
+  // Adds a new conditional field to TypeScript interface
   maxTokens: number | string;
 }
 
@@ -38,7 +38,7 @@ export const AiModelForm: React.FC = () => {
   useEffect(() => {
     const fetchExistingConfig = async () => {
       try {
-        // Pull real current data straight from your running Node server environment!
+        // Pull current data from the backend API to pre-populate the form fields
         const response = await fetch("/api/model-config");
         if (!response.ok)
           throw new Error("Could not contact backend node cluster");

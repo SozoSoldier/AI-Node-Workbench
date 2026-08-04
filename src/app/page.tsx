@@ -31,6 +31,6 @@ export default function Home() {
     );
   }
 
-  // If verified, display your beautiful side-by-side workspace layouts
+  // If verified, displays side-by-side workspace layouts
   return <MainLayout />;
 }

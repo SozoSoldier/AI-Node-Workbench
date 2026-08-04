@@ -6,7 +6,7 @@ export async function GET() {
     "--- NEXT.JS API: Received a GET request for framework registry entries ---",
   );
 
-  // The mock database array matching the structure your frontend expects
+  // The mock database array matching the structure that the frontend expects
   const mockFrameworks = {
     results: [
       { name: "DeepSeek-R1-Core" },

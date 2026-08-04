@@ -20,7 +20,7 @@ let aiDatabaseConfig = {
   maxTokens: 4096,
 };
 
-// 2. Define your backend Validation Schema (Structural constraints checklist)
+// 2. Define backend Validation Schema (Structural constraints checklist)
 const ModelConfigSchema = z
   .object({
     modelName: z

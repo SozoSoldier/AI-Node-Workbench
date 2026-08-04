@@ -21,7 +21,7 @@ export const LiveAiStream: React.FC = () => {
     }
   }, [activeMessages, isAiThinking]);
 
-  // Replace your handleFormSubmit function inside src/LiveAiStream.tsx with this GraphQL request layout:
+  // Replace handleFormSubmit function inside src/LiveAiStream.tsx with GraphQL request layout:
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userInput.trim() || !activeThreadId || isAiThinking) return;
@@ -56,14 +56,14 @@ export const LiveAiStream: React.FC = () => {
         },
       };
 
-      // Execute the network request directly to your modern Next.js route
+      // Execute the network request directly to Next.js route
       await fetch("/api/graphql", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(graphQLMutation),
       });
 
-      // 3. Trigger your mock AI response loop after the GraphQL handshake completes
+      // 3. Trigger mock AI response loop after the GraphQL handshake completes
       setTimeout(() => {
         addMessageToActiveThread({
           id: `msg-${Date.now()}-ai`,

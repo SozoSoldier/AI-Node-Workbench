@@ -2,7 +2,7 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { NextRequest } from "next/server";
 
-// 1. Define your GraphQL Type Definitions (Schema)
+// 1. Defines GraphQL Type Definitions (Schema)
 // This strictly types what queries (GETs) and mutations (POSTs) the client can make
 const typeDefs = `#graphql
   type ChatMessage {
@@ -34,7 +34,7 @@ const mockGraphQLDatabase: Record<
   ],
 };
 
-// 2. Define your Resolvers (The code that actually fetches or updates the data)
+// 2. Define Resolvers (The code that actually fetches or updates the data)
 const resolvers = {
   Query: {
     getThreadMessages: (_: any, { threadId }: { threadId: string }) => {

@@ -1,7 +1,6 @@
-/* 1. REPLACE your old three @tailwind lines with this single v4 standard import */
 @import "tailwindcss";
 
-/* 2. Keep your existing custom scrollbar styles below it */
+/* Custom scrollbar styles */
 .custom-scrollbar::-webkit-scrollbar {
   width: 5px;
 }

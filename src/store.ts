@@ -28,7 +28,7 @@ interface ChatStore {
   logout: () => void;
 }
 
-// 2. Wrap your entire store creation function inside the persist() middleware wrapper
+// 2. Wrap entire store creation function inside the persist() middleware wrapper
 export const useChatStore = create<ChatStore>()(
   persist(
     (set, get) => ({
